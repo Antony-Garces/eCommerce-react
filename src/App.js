@@ -6,6 +6,8 @@ import Products from './components/Products';
 import { Routes } from 'react-router-dom';
 import {BrowserRouter} from 'react-router-dom';
 import { Route } from 'react-router-dom';
+import SignIn from './components/Signin';
+import SignUp from './components/Signup';
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Routes>
             <Route path='/Checkout-page' element={<CheckoutPage/>}/>
             <Route path='/' element={<Products/>}/>
+            <Route path='/Signin' element={<SignIn/>}/>
+            <Route path='/Signup' element={<SignUp/>}/>
           </Routes>
         </BrowserRouter>
       </div>
