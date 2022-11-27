@@ -12,6 +12,9 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {AddShoppingCart} from '@material-ui/icons';
 import accounting from 'accounting';
+import { actionTypes } from '../reducer';
+import { useStateValue } from '../StateProvider';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,13 +39,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Product() {
+export default function Product({ product : {id, name, productType, image, price, rating, description}}) {
   const classes = useStyles();
+  const [{basket}, dispatch ] = useStateValue();
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const addToBasket = () =>{
+    dispatch({
+      type: actionTypes.ADD_TO_BASKET,
+      item: {
+        id: id,
+        name: name, 
+        productType: productType,
+        image: image,
+        price: price,
+        rating: rating,
+        description: description,
+      }
+    }) 
+  }
 
   return (
     <Card className={classes.root}>
@@ -53,27 +72,27 @@ export default function Product() {
             variant = "h5"
             color='texSecondary'
             >
-                {accounting.formatMoney(50)}
+                {accounting.formatMoney(price)}
             </Typography>
         }
-        title="Shoes"
+        title={name}
         subheader="in Stock"
       />
       <CardMedia
         className={classes.media}
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaz24MZj7aBbC5snhWqiIcvG7vr0ruXSUGy4ovKWPEOAZCuXGUy0mJPOnW9FF4NslCLsQ&usqp=CAU"
-        title="Paella dish"
+        image={image}
+        title={name}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          Running Shoes
+          {productType}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label='Add to Cart'>
+        <IconButton aria-label='Add to Cart' onClick={addToBasket}>
             <AddShoppingCart fontSize='large'/>
         </IconButton>
-        {Array(4)
+        {Array(rating)
         .fill()
         .map((_, i) => (
             <p>&#11088;</p>
@@ -91,7 +110,7 @@ export default function Product() {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Zapatos para correr</Typography>
+          <Typography paragraph>{description}</Typography>
         </CardContent>
       </Collapse>
     </Card>
