@@ -14,7 +14,9 @@ import Container from '@material-ui/core/Container';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import { Link as RouteLink } from 'react-router-dom';
 import { useState } from 'react';
-import { auth, createUserWithEmailAndPassword} from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from "../firebase"
+
 import { useNavigate} from 'react-router-dom'
 
 function Copyright(props) {
@@ -47,9 +49,20 @@ export default function SignUp() {
 
   const signup = (e) => {
     e.preventDefault();
-    
-    
-  }
+    try {
+      const credential = createUserWithEmailAndPassword(
+        auth, 
+        email, 
+        password
+        );
+        console.log(credential)
+        if (credential) {
+          history("/Signin")
+        }
+    } catch (error) {console.log(error.message)}       
+  } 
+
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

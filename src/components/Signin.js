@@ -12,7 +12,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import { Link as RouteLink, useHistory } from 'react-router-dom';
+import { Link as RouteLink, useNavigate, } from 'react-router-dom';
+import { useState } from 'react';
+import {  signInWithEmailAndPassword} from "firebase/auth"
+import { auth } from "../firebase"
 
 function Copyright(props) {
   return (
@@ -39,6 +42,25 @@ export default function SignIn() {
     });
   };
 
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const history = useNavigate();
+
+  const signin = (e) => {
+    e.preventDefault();
+    try {
+      const credential = signInWithEmailAndPassword(
+        auth, 
+        email, 
+        password
+        );
+        console.log(credential)
+        if (credential) {
+          history("/")
+        }
+    } catch (error) {console.log(error.message)}       
+  } 
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -59,6 +81,8 @@ export default function SignIn() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
+              value={email}
+              onChange={e => setEmail(e.target.value)}
               margin="normal"
               required
               fullWidth
@@ -69,6 +93,8 @@ export default function SignIn() {
               autoFocus
             />
             <TextField
+              value={password}
+              onChange={e => setPassword(e.target.value)}
               margin="normal"
               required
               fullWidth
@@ -86,6 +112,7 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
+              onClick={signin}
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In

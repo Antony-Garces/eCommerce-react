@@ -6,6 +6,7 @@ import { getBasketTotal } from '../reducer';
 
 
 
+
 const useStyles = makeStyles(() => ({
     root: {
       display: "flex",
@@ -23,7 +24,9 @@ const useStyles = makeStyles(() => ({
 
 const Total = () => {
   const classes = useStyles();
-  const [{basket}, dispatch ] = useStateValue();
+  let [{basket}, dispatch ] = useStateValue();
+
+  
 
   return (
     <div className={classes.root}>
